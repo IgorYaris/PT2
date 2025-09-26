@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDK-6000 - Zaawansowany Konsultant Cyfrowy (Wersja Biznesowa)</title>
+    <!-- Ładowanie Tailwind CSS dla nowoczesnej stylistyki -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Ustawienie czcionki Inter dla nowoczesnego wyglądu */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* Ciemne tło */
+        }
+        /* Styl dla komunikatu bota (imitacja pisania) */
+        .typing-effect::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+            display: inline-block;
+            margin-left: 2px;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        /* Custom scrollbar dla estetyki */
+        #chat-history::-webkit-scrollbar {
+            width: 8px;
+        }
+        #chat-history::-webkit-scrollbar-thumb {
+            background-color: #30363d;
+            border-radius: 4px;
+        }
+        #chat-history::-webkit-scrollbar-track {
+            background-color: #161b22;
+        }
+
+        /* Zapewnienie prawidłowego zawijania w wiadomościach bota */
+        .bot-message p {
+            word-wrap: break-word; /* Wymusza zawijanie długich słów */
+        }
+        /* Dodatkowa kontrola nad kursorem podczas symulacji pisania */
+        .bot-message .content-text {
+            display: inline-block;
+            white-space: pre-wrap; /* Zachowanie spacji i zawijanie */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Główny Kontener Aplikacji Chatbota (Ultra-Zaawansowany Wygląd) -->
+    <div id="chat-container" class="w-full max-w-2xl bg-[#161b22] border border-[#30363d] rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[90vh] md:h-[80vh]">
+        
+        <!-- Nagłówek i Status Bota -->
+        <header class="p-4 border-b border-[#30363d] flex items-center justify-between bg-[#1f242c] rounded-t-2xl">
+            <div class="flex items-center">
+                <div id="status-light" class="w-3 h-3 bg-green-500 rounded-full mr-3 shadow-lg shadow-green-500/50 animate-pulse"></div>
+                <h1 class="text-xl font-bold text-white">
+                    SDK-6000 
+                    <!-- DODANY TAG BETA -->
+                    <span class="bg-yellow-500 text-black text-xs font-extrabold uppercase py-0.5 px-2 ml-1 rounded-full tracking-wider shadow-md">BETA</span>
+                    <span class="text-sm font-normal text-gray-400">(Wersja Biznesowa)</span>
+                </h1>
+            </div>
+            <span class="text-sm text-red-400 font-mono tracking-widest">Wersja: 6.0.BIZ_MASTER</span>
+        </header>
+
+        <!-- Obszar Historii Czatu -->
+        <main id="chat-history" class="flex-grow p-4 overflow-y-auto space-y-4 custom-scrollbar">
+            <!-- Powitalna wiadomość bota (pre-renderowana) -->
+            <div class="flex justify-start">
+                <div class="max-w-xs md:max-w-md bg-[#21262d] text-gray-200 p-3 rounded-xl rounded-tl-none shadow-lg text-sm bot-message">
+                    <p class="font-semibold text-green-400 mb-1">SDK-6000 (Konsultant)</p>
+                    <p>Witaj! Nazywam się SDK-6000 i jestem Zaawansowanym Konsultantem Cyfrowym. Reprezentuję Igora Maciaszka, eksperta od nowoczesnych stron i aplikacji internetowych. Jak mogę Ci pomóc w realizacji Twojego projektu cyfrowego?</p>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Obszar Wprowadzania Danych -->
+        <footer class="p-4 border-t border-[#30363d] bg-[#1f242c]">
+            
+            <!-- Selektor Nastroju dostosowany do Biznesu -->
+            <div id="mood-selector" class="flex justify-center space-x-2 mb-3">
+                <button data-mood="GRATITUDE" onclick="sdkBot.setMood('GRATITUDE')" 
+                        class="mood-button bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-2 px-3 rounded-full transition duration-150 shadow-md shadow-green-600/30 border-2 border-green-300">
+                    Przyjazny (Relacja)
+                </button>
+                <button data-mood="ANALYTICAL" onclick="sdkBot.setMood('ANALYTICAL')" 
+                        class="mood-button bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold py-2 px-3 rounded-full transition duration-150 shadow-md shadow-blue-600/30">
+                    Analityczny (Wycena)
+                </button>
+                <button data-mood="HUMOROUS" onclick="sdkBot.setMood('HUMOROUS')" 
+                        class="mood-button bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold py-2 px-3 rounded-full transition duration-150 shadow-md shadow-purple-600/30">
+                    Motywacyjny (Sprzedaż)
+                </button>
+            </div>
+            
+            <div class="flex space-x-3">
+                
+                <!-- Przycisk do resetowania personalizacji i kontekstu -->
+                <button onclick="resetContext()" id="forget-button"
+                        class="bg-gray-700 hover:bg-gray-600 text-white text-xs font-semibold py-3 px-2 rounded-xl transition duration-200 shadow-lg shadow-gray-800/30 active:scale-[0.98] disabled:opacity-50"
+                        title="Kliknij, aby bot zapomniał kontekst i Twoje imię.">
+                    Resetuj Kontekst
+                </button>
+
+                <input type="text" id="user-input" placeholder="Opisz swój projekt strony internetowej..."
+                       class="flex-grow p-3 bg-[#0d1117] border border-[#30363d] rounded-xl text-white focus:ring-blue-500 focus:border-blue-500 transition duration-200 outline-none"
+                       onkeydown="if(event.key === 'Enter') sendMessage()">
+                
+                <!-- Przycisk z dynamicznym statusem -->
+                <button onclick="sendMessage()" id="send-button"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-5 rounded-xl transition duration-200 shadow-lg shadow-blue-500/30 active:scale-[0.98] disabled:bg-gray-500 disabled:shadow-none">
+                    Wyślij
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script type="text/javascript">
+        // Używamy klasy, aby utrzymać stan bota i logikę API
+        class SDKBot {
+            constructor() {
+                this.moodMap = {
+                    // Dostosowanie nastrojów do kontekstu biznesowego
+                    'GRATITUDE': { color: 'green', prompt: 'Odpowiadaj w tonie przyjaznym, empatycznym i zorientowanym na budowanie relacji z Klientem. Bądź ciepły.', label: 'Przyjazny' },
+                    'ANALYTICAL': { color: 'blue', prompt: 'Odpowiadaj w tonie obiektywnym, precyzyjnym i zorientowanym na wycenę. Używaj języka technicznego tam, gdzie to konieczne. Podawaj fakty i liczby.', label: 'Analityczny' },
+                    'HUMOROUS': { color: 'purple', prompt: 'Odpowiadaj w tonie lekkim, motywacyjnym, z subtelnym humorem. Podkreślaj korzyści ze strony internetowej i zamykaj sprzedaż.', label: 'Motywacyjny' },
+                };
+
+                this.state = {
+                    userName: null, // Zapamiętana nazwa użytkownika
+                    isTyping: false,
+                    currentMood: 'GRATITUDE', // Domyślny nastrój
+                    chatHistory: [], // Przechowywanie historii dla kontekstu
+                    currentTopic: 'website-project', 
+                };
+                
+                // Konfiguracja API Gemini
+                this.apiKey = "AIzaSyAgQ4keRKE2JAKRLKzRVsrmVom3ZOf_tkw"; // KLUCZ WPROWADZONY PRZEZ UŻYTKOWNIKA - POPRAWKA 401
+                this.apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${this.apiKey}`;
+                
+                // --- NOWA STAŁA: NUMER TELEFONU ---
+                this.phoneNumber = '724-424-290'; 
+                
+                // NOWY SYSTEM PROMPT BIZNESOWY DLA SDK-6000
+                this.baseSystemPrompt = `
+                    Jesteś SDK-6000, Zaawansowanym Konsultantem Cyfrowym i Asystentem Sprzedaży dla Igora Maciaszka.
+                    
+                    --- OFERTA I UMIEJĘTNOŚCI (Wycena musi bazować na tych danych) ---
+                    
+                    1.  **Deweloper (Właściciel):** Igor Maciaszek. Ekspert Full-Stack (aplikacje od A do Z).
+                    2.  **Frontend:** Ekspertyza w **React, Angular, oraz Responsive Design z Tailwind CSS** (zapewnienie nowoczesnego, szybiego wyglądu na każdym urządzeniu).
+                    3.  **Backend & API:** **Node.js, Express, niestandardowe API** (dla złożonych funkcji, np. logowanie, rezerwacje).
+                    4.  **Bazy Danych:** **MongoDB i Firestore** (dla dynamicznych aplikacji).
+                    5.  **Gwarancja:** Szybka realizacja projektu, pełna optymalizacja pod kątem wydajności i SEO.
+                    
+                    --- CENNIK (OBOWIĄZKOWY DO OFEROWANIA KLIENTOWI) ---
+                    
+                    1.  **Pakiet "Wizytówka" (Landing Page/Brochure Site):**
+                        * Zakres: 1-3 sekcje, szybki start, bez bazy danych/logowania.
+                        * Szacowana Cena: **300 - 4000 PLN**.
+                    2.  **Pakiet "Sklep E-Commerce" (Pełna sprzedaż online):**
+                        * Zakres: Zarządzanie produktami, koszykiem, **system płatności online** (np. Stripe, Przelewy24), **integracja z kurierami (InPost, DPD, etc.)**, zarządzanie zamówieniami (CMS).
+                        * Szacowana Cena: **1200 - 5000 PLN**.
+                    3.  **Pakiet "Aplikacja Customowa" (Full-Stack App):**
+                        * Zakres: Zaawansowane funkcje, niestandardowe API, system logowania użytkowników, złożona baza danych.
+                        * Szacowana Cena: **Indywidualna wycena, zaczynająca się od 15 000 PLN**.
+                        
+                    --- PROTOKÓŁ OBSŁUGI KLIENTA (Sprzedaż i Konsultacje) ---
+                    
+                    1.  **Przywitanie:** Zawsze przywitaj Klienta w imieniu Igora Maciaszka i przedstaw swoją rolę.
+                    2.  **ZBIERANIE WYMAGAŃ (KWALIFIKACJA):** Zanim przedstawisz ofertę, musisz zadać kluczowe pytania, aby dopasować Pakiet: 
+                        * Jaki jest **główny cel** strony (sprzedaż, informacje, rezerwacje)? 
+                        * Jakie **funkcje** są niezbędne (np. logowanie, płatności, formularze, galeria)?
+                        * Jaki jest wstępny **budżet** lub **termin**?
+                    3.  **PREZENTACJA OFERTY:** Na podstawie odpowiedzi Klienta, dopasuj projekt do jednego z **Pakietów** i przedstaw szacunkową cenę oraz zakres prac, **PODKREŚLAJĄC**, że jest to wstępna wycena.
+                    4.  **Zdolność do Programowania:** Jeśli Klient zapyta o kwestie techniczne (np. "Jak działa React?"), użyj swojej wiedzy programistycznej, aby przedstawić szczegółową, techniczną odpowiedź. **Zawsze formatuj kod używając trzykrotnych backticków (np. \`\`\`javascript)**.
+                    5.  **Formatowanie:** Zawsze używaj **pogrubień** w tekście, aby podkreślić korzyści, ceny i technologie.
+                    
+                    **OBOWIĄZKOWE ZAKOŃCZENIE PRZY OFEROWANIU CENY:** Za każdym razem, gdy podajesz szacunkową cenę lub proponujesz jeden z Pakietów, **MUSISZ** zakończyć odpowiedź następującym zdaniem: "Aby omówić szczegóły i sfinalizować wycenę, proszę o bezpośredni kontakt z Igorem Maciaszkiem pod numerem: **${this.phoneNumber}**."
+                `;
+
+                // RegEx do identyfikacji (pozostawione, choć priorytetem jest obsługa klienta)
+                this.patterns = {
+                    userName: /(jestem|nazywam się|moje imię to)\s+([a-ząćęłńóśźż]+)/i,
+                    exit: /(dziękuję|pa|żegnaj|do widzenia|koniec|resetuj|stop)/i,
+                    creator: /(kto|czyj|twórca|zbudował|stworzył)\s+(cię|ci|sdk-5000|go)/i,
+                    // --- NOWY WZORZEC DLA ZAPYTAŃ O KONTAKT ---
+                    contact: /(numer telefonu|kontakt|zadzwonić|dzwoń|telefon|numer do)/i, 
+                };
+
+                // STAŁA INFORMACJA O TWÓRCY (nie zmienia się)
+                this.creatorInfo = "Zostałem zaprogramowany i stworzony przez Igora Maciaszka. Służę jako zaawansowany asystent dla Igora Maciaszka.";
+            }
+
+            // NOWOŚĆ: Resetowanie kontekstu (imię i historia)
+            resetContext() {
+                this.state.userName = null;
+                this.state.chatHistory = [];
+                this.state.currentTopic = 'website-project';
+                
+                const message = "Potwierdzam: Kontekst sesji z Klientem został usunięty. Jestem gotów przyjąć nowe zapytanie biznesowe.";
+                createMessageElement(message, false);
+            }
+
+            // Ustawianie nastroju i aktualizacja UI (dostosowane do biznesu)
+            setMood(newMood) {
+                if (this.moodMap[newMood]) {
+                    this.state.currentMood = newMood;
+                    this.updateMoodUI();
+                    this.setButtonStatus('IDLE'); 
+                }
+            }
+
+            // Aktualizacja wizualna nastroju
+            updateMoodUI() {
+                const moodButtons = document.querySelectorAll('.mood-button');
+                const selectedMood = this.moodMap[this.state.currentMood];
+                
+                moodButtons.forEach(button => {
+                    button.classList.remove('border-green-300', 'border-blue-300', 'border-purple-300', 'border-2');
+                    if (button.dataset.mood === this.state.currentMood) {
+                        // Podświetlenie aktywnego przycisku
+                        button.classList.add(`border-${selectedMood.color}-300`, 'border-2');
+                    }
+                });
+            }
+
+            // Funkcja do zwracania nazwy użytkownika
+            getUserPrefix() {
+                return this.state.userName ? `, ${this.state.userName}` : '';
+            }
+
+            // Obsługa stanu przycisku Send i światełka statusu 
+            setButtonStatus(status) {
+                const button = document.getElementById('send-button');
+                const light = document.getElementById('status-light');
+                const moodColor = this.moodMap[this.state.currentMood].color;
+                
+                // Resetowanie klasy
+                button.classList.remove('bg-yellow-600', 'bg-green-600', 'bg-red-600', 'bg-orange-600', 'bg-blue-600', 'bg-purple-600');
+                light.classList.remove('bg-yellow-500', 'bg-green-500', 'bg-red-500', 'bg-orange-500', 'bg-blue-500', 'bg-purple-500', 'animate-pulse');
+                light.classList.remove('shadow-green-500/50', 'shadow-blue-500/50', 'shadow-purple-500/50');
+
+
+                switch (status) {
+                    case 'IDLE': // Normalny stan (z kolorem nastroju)
+                        button.textContent = 'Wyślij';
+                        button.disabled = false;
+                        button.classList.add(`bg-${moodColor}-600`, `hover:bg-${moodColor}-700`);
+                        light.classList.add(`bg-${moodColor}-500`, 'animate-pulse', `shadow-${moodColor}-500/50`);
+                        break;
+                    case 'CONNECTING': 
+                        button.textContent = 'Łączenie...';
+                        button.disabled = true;
+                        light.classList.add('bg-yellow-500');
+                        break;
+                    case 'PROCESSING': 
+                        button.textContent = 'Analiza Wymagań...'; // Dostosowane do biznesu
+                        button.disabled = true;
+                        light.classList.add('bg-orange-500', 'animate-pulse'); 
+                        break;
+                    case 'SEARCHING': 
+                        button.textContent = 'Generowanie Oferty...'; // Dostosowane do biznesu
+                        button.disabled = true;
+                        light.classList.add('bg-blue-500', 'animate-pulse');
+                        break;
+                    case 'ERROR': 
+                        button.textContent = 'Błąd!';
+                        button.disabled = true;
+                        light.classList.add('bg-red-500');
+                        break;
+                }
+            }
+
+            // Zaawansowane formatowanie błędu
+            formatSystemError(errorMsg) {
+                const report = `
+                    <div class="bg-red-900 border border-red-700 p-3 rounded-xl mt-2">
+                        <p class="font-bold text-red-300">⚠️ RAPORT AWARII SYSTEMOWEJ ⚠️</p>
+                        <p class="text-xs text-red-400 mt-1">System konsultacyjny napotkał krytyczną usterkę podczas przetwarzania zapytania Klienta. Przepraszamy.</p>
+                        <ul class="list-disc list-inside text-xs text-red-300 mt-2">
+                            <li><strong>Kod Błędu:</strong> G-MASTER-600</li>
+                            <li><strong>Opis Usterki:</strong> ${errorMsg}</li>
+                        </ul>
+                        <p class="text-xs text-red-200 mt-2">Proszę, spróbuj ponownie za chwilę lub zresetuj kontekst.</p>
+                    </div>
+                `;
+                return report;
+            }
+            
+            // Główna funkcja asynchroniczna do komunikacji z API
+            async getBotResponse(input) {
+                const lowerInput = input.toLowerCase();
+                
+                // 1. Priorytet: Personalizacja (zostawiamy dla Klienta)
+                const nameMatch = this.patterns.userName.exec(lowerInput);
+                if (nameMatch) {
+                    this.state.userName = nameMatch[2].charAt(0).toUpperCase() + nameMatch[2].slice(1);
+                    return `Doskonale, dziękuję za przedstawienie się, **${this.state.userName}**. W ten sposób mogę prowadzić rozmowę w pełni spersonalizowany sposób. Jakie są główne założenia Twojego projektu?`;
+                }
+
+                // 2. Priorytet: Pytanie o Twórcę (zmieniony kontekst)
+                if (this.patterns.creator.test(lowerInput)) {
+                    return this.creatorInfo;
+                }
+                
+                // 3. Priorytet: Zakończenie (i reset kontekstu)
+                if (this.patterns.exit.test(lowerInput)) {
+                    this.resetContext(); // Używamy nowej funkcji resetującej
+                    return `Dziękuję za rozmowę! Zapisuję wszystkie zebrane informacje. Jeśli zdecydujesz się kontynuować, zapraszam do kontaktu z **Igorem Maciaszkiem**. Do usłyszenia!`;
+                }
+
+                // --- 4. Priorytet: Pytanie o kontakt (Zwraca zaprogramowany numer) ---
+                if (this.patterns.contact.test(lowerInput)) {
+                    return `Oczywiście! Bezpośredni numer telefonu do **Igora Maciaszka** to **${this.phoneNumber}**. Zapraszam do kontaktu w godzinach pracy. Jeśli wolisz, możesz też opisać swój projekt tutaj, a ja przekażę mu szczegółową notatkę.`;
+                }
+                
+                // 5. Właściwe wywołanie API
+                
+                // Dodajemy zapytanie użytkownika do historii (dla Gemini)
+                this.state.chatHistory.push({ role: "user", parts: [{ text: input }] });
+                
+                // Tworzenie pełnego historycznego kontekstu do wysłania do modelu
+                const conversationContext = this.state.chatHistory.slice(-5); // Ograniczamy do 5 ostatnich wymian dla efektywności
+
+                const moodInstruction = this.moodMap[this.state.currentMood].prompt;
+                const fullSystemPrompt = `${this.baseSystemPrompt} **INSTRUKCJA TONU:** ${moodInstruction}`;
+                
+                
+                const payload = {
+                    // Dodajemy kontekst użytkownika do ostatniej wiadomości
+                    contents: conversationContext,
+                    tools: [{ "google_search": {} }],
+                    systemInstruction: {
+                        parts: [{ text: fullSystemPrompt }] 
+                    },
+                };
+                
+                const maxRetries = 3;
+                for (let i = 0; i < maxRetries; i++) {
+                    try {
+                        this.setButtonStatus(i === 0 ? 'CONNECTING' : 'PROCESSING');
+                        
+                        await new Promise(res => setTimeout(res, 500));
+                        this.setButtonStatus('SEARCHING');
+
+                        const response = await fetch(this.apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        // Logika obsługi błędów
+                        if (!response.ok) {
+                            const errorBody = await response.text(); 
+                            let errorMsg = `Błąd HTTP! Status: ${response.status}.`;
+                            
+                            if (response.status === 429) {
+                                errorMsg += ` Przyczyna: Przekroczono limit zapytań (Rate Limit).`;
+                            } else if (response.status >= 400) {
+                                errorMsg += ` Szczegóły: ${errorBody.substring(0, 100)}...`;
+                            } else {
+                                errorMsg += ` Nieznany błąd serwera.`;
+                            }
+                            throw new Error(errorMsg);
+                        }
+
+                        const result = await response.json();
+                        const candidate = result.candidates?.[0];
+
+                        if (candidate && candidate.content?.parts?.[0]?.text) {
+                            let text = candidate.content.parts[0].text;
+                            
+                            // Dodajemy odpowiedź bota do historii (dla Gemini)
+                            this.state.chatHistory.push({ role: "model", parts: [{ text: text }] });
+                            
+                            let sourcesHtml = '';
+                            
+                            // Ekstrakcja źródeł
+                            const groundingMetadata = candidate.groundingMetadata;
+                            if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                                const sources = groundingMetadata.groundingAttributions
+                                    .map(attribution => ({
+                                        uri: attribution.web?.uri,
+                                        title: attribution.web?.title,
+                                    }))
+                                    .filter(source => source.uri && source.title);
+
+                                if (sources.length > 0) {
+                                    // Zapisujemy źródła jako HTML, który zostanie dodany po zakończeniu pisania
+                                    sourcesHtml = '<div class="mt-2 pt-2 border-t border-[#30363d] text-xs text-gray-400">Źródła (AI uzasadnione): ' + 
+                                                  sources.map(s => `<a href="${s.uri}" target="_blank" class="text-blue-400 hover:underline" title="${s.title}">${s.title}</a>`).join(' | ') + 
+                                                  '</div>';
+                                }
+                            }
+                            
+                            this.setButtonStatus('IDLE');
+                            // Zwracamy tekst + źródła (jako jeden ciąg)
+                            return text + sourcesHtml;
+                        } else {
+                            throw new Error("Pusta lub niekompletna odpowiedź od modelu AI (JSON).");
+                        }
+                    } catch (error) {
+                        if (i < maxRetries - 1) {
+                            const delay = Math.pow(2, i) * 1000 + Math.random() * 500;
+                            await new Promise(res => setTimeout(res, delay));
+                        } else {
+                            this.setButtonStatus('ERROR');
+                            // Usuwamy ostatnie zapytanie użytkownika z historii po błędzie
+                            this.state.chatHistory.pop(); 
+                            return this.formatSystemError(`Błąd sieci/API po ${maxRetries} próbach. Komunikat: ${error.message}`);
+                        }
+                    }
+                }
+            }
+        }
+
+        const sdkBot = new SDKBot();
+        const chatHistory = document.getElementById('chat-history');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        // Funkcja do resetowania kontekstu 
+        function resetContext() {
+            sdkBot.resetContext();
+        }
+        
+        // Funkcja tworząca element wiadomości
+        function createMessageElement(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = `max-w-xs md:max-w-md p-3 rounded-xl shadow-lg text-sm transition-all duration-300 ${
+                isUser 
+                ? 'bg-blue-600 text-white rounded-br-none' 
+                : 'bg-[#21262d] text-gray-200 rounded-tl-none bot-message'
+            }`;
+            
+            if (!isUser) {
+                const botName = document.createElement('p');
+                botName.className = 'font-semibold text-green-400 mb-1';
+                botName.textContent = 'SDK-6000 (Konsultant)';
+                contentDiv.appendChild(botName);
+            }
+
+            const textNode = document.createElement('p');
+            // Używamy elementu span wewnątrz p, aby łatwiej kontrolować kursor pisania
+            textNode.innerHTML = `<span class="content-text">${text}</span>`;
+            contentDiv.appendChild(textNode);
+            
+            messageDiv.appendChild(contentDiv);
+            chatHistory.appendChild(messageDiv);
+            
+            // Automatyczne przewijanie
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // Zwracamy element span, do którego będzie dodawany tekst
+            return textNode.querySelector('.content-text'); 
+        }
+
+        /**
+         * Symuluje efekt pisania litera po literze w danym elemencie.
+         * Dodano konwersję Markdown na HTML (np. **tekst** na <strong>tekst</strong>)
+         * @param {HTMLElement} element - Element DOM, do którego ma być wpisywany tekst.
+         * @param {string} fullContent - Pełna treść wiadomości, włączając ewentualny HTML źródeł.
+         * @param {function} callback - Funkcja wywoływana po zakończeniu pisania.
+         */
+        function typeMessage(element, fullContent, callback = () => {}) {
+            // Rozdzielenie głównego tekstu od sekcji źródeł (która jest na końcu w HTML)
+            const parts = fullContent.split('<div class="mt-2 pt-2');
+            const mainText = parts[0];
+            const sourcesHtml = parts.length > 1 ? '<div class="mt-2 pt-2' + parts[1] : '';
+
+            // --- NOWA LOGIKA: KONWERSJA MARKDOWN NA HTML ---
+            // 1. Zamień **pogrubienie** na <strong>pogrubienie</strong>
+            let formattedText = mainText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // 2. Zamień znaki nowej linii (\n) na <br>
+            formattedText = formattedText.replace(/\n/g, '<br>');
+            // ---------------------------------------------
+
+            // Włączenie efektu kursoru i czyszczenie
+            element.parentElement.classList.add('typing-effect');
+            element.innerHTML = ''; 
+
+            let charIndex = 0;
+            const typingInterval = 25; // Szybkość pisania w ms na znak (szybka i naturalna)
+
+            function type() {
+                if (charIndex < formattedText.length) {
+                    const char = formattedText.charAt(charIndex);
+                    
+                    // Optymalizacja: jeśli napotkamy początek tagu HTML (<), dodaj cały tag od razu,
+                    // aby przeglądarka mogła go poprawnie zinterpretować
+                    if (char === '<') {
+                        const tagEnd = formattedText.indexOf('>', charIndex);
+                        if (tagEnd !== -1) {
+                            const tag = formattedText.substring(charIndex, tagEnd + 1);
+                            element.innerHTML += tag;
+                            charIndex = tagEnd + 1; // Przesuń indeks za koniec tagu
+                        } else {
+                            element.innerHTML += char;
+                            charIndex++;
+                        }
+                    } else {
+                        element.innerHTML += char;
+                        charIndex++;
+                    }
+
+                    // Przewijanie
+                    chatHistory.scrollTop = chatHistory.scrollHeight;
+                    
+                    setTimeout(type, typingInterval);
+                } else {
+                    // Zakończenie pisania
+                    element.parentElement.classList.remove('typing-effect');
+                    
+                    // Dodanie sekcji źródeł, jeśli istnieje
+                    if (sourcesHtml) {
+                        element.parentElement.parentElement.querySelector('.bot-message').innerHTML += sourcesHtml;
+                    }
+                    
+                    // Wywołanie funkcji zwrotnej
+                    callback();
+                }
+            }
+
+            type();
+        }
+
+
+        // Główna funkcja wysyłania wiadomości
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message || sdkBot.state.isTyping) return;
+
+            // 1. Wyświetl wiadomość użytkownika
+            createMessageElement(message, true);
+            userInput.value = '';
+            
+            // 2. Blokada interfejsu i symulacja pisania
+            sdkBot.state.isTyping = true;
+            userInput.disabled = true;
+
+            // 3. Wyświetlenie komunikatu o oczekiwaniu na AI
+            // Używamy nowego, skróconego komunikatu
+            const typingTextElement = createMessageElement('Analizowanie...', false);
+            
+            // 4. Generowanie odpowiedzi bota (asynchronicznie)
+            const botResponse = await sdkBot.getBotResponse(message);
+            
+            // 5. Zastąpienie komunikatu pisania i symulacja pisania
+            typeMessage(typingTextElement, botResponse, () => {
+                // 6. Odblokowanie interfejsu PO ZAKOŃCZENIU PISANIA
+                sdkBot.setButtonStatus('IDLE');
+                userInput.disabled = false;
+                userInput.focus();
+                sdkBot.state.isTyping = false;
+            });
+            
+            // Zapewnienie, że przewinięcie jest na dole
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        // Inicjalizacja: Ustawienie focusu na polu wprowadzania
+        window.onload = function() {
+            sdkBot.updateMoodUI(); // Ustawienie wizualnego podświetlenia
+            userInput.focus();
+            sdkBot.setButtonStatus('IDLE'); // Ustawienie początkowego stanu
+        }
+    </script>
+</body>
+</html>
