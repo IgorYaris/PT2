@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Igor Maciaszek – Kontakt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    /* -----------------------------------------------------------------------------------------------------------------------------------------
+    GLOBALNE STYLE I ZMIENNE
+    ----------------------------------------------------------------------------------------------------------------------------------------- */
+
+    :root {
+      --dark-blue-bg: #0a192f;
+      --medium-blue-bg: #112240;
+      --light-blue-text: #ccd6f6;
+      --grayish-text: #8892b0;
+      --accent-color: #64ffda;
+      --border-color: #233554;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--dark-blue-bg);
+      color: var(--light-blue-text);
+      line-height: 1.6;
+    }
+
+    /* ParticlesJS */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      top: 0;
+      left: 0;
+    }
+
+    /* -----------------------------------------------------------------------------------------------------------------------------------------
+    NAWIGACJA
+    ----------------------------------------------------------------------------------------------------------------------------------------- */
+    .top-navbar {
+      background-color: var(--medium-blue-bg);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky; 
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(10, 25, 47, 0.5);
+    }
+
+    .logo {
+      color: var(--accent-color);
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+
+    .nav-links a {
+      color: var(--light-blue-text);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 15px;
+      transition: color 0.3s, background-color 0.3s;
+      border-radius: 4px;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-color);
+    }
+
+    .nav-links a.active {
+      color: var(--accent-color);
+      border-bottom: 2px solid var(--accent-color);
+    }
+
+    .menu-toggle {
+        display: none; 
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--accent-color);
+    }
+
+    /* Nagłówek */
+    header {
+      padding: 60px 20px 30px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      color: var(--accent-color);
+    }
+    
+    header p {
+        color: var(--grayish-text); 
+        font-size: 1.1rem; 
+        margin-top: 10px;
+    }
+
+    /* -----------------------------------------------------------------------------------------------------------------------------------------
+    SEKCJA KONTAKT I DANE
+    ----------------------------------------------------------------------------------------------------------------------------------------- */
+    .contact-section {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 40px;
+      background-color: var(--medium-blue-bg);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(100, 255, 218, 0.1);
+      display: flex;
+      flex-wrap: wrap; 
+      gap: 40px;
+      justify-content: space-between;
+    }
+
+    .contact-info, .contact-form-container {
+      flex: 1;
+      min-width: 300px; 
+    }
+
+    .contact-info h2, .contact-form-container h2 {
+        color: var(--accent-color);
+        font-size: 1.8rem;
+        margin-top: 0;
+        margin-bottom: 20px;
+        border-bottom: 1px dashed var(--border-color);
+        padding-bottom: 10px;
+    }
+
+    .contact-details p {
+      margin: 16px 0;
+      color: var(--light-blue-text);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    .contact-details a {
+        color: var(--light-blue-text);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .contact-details a:hover {
+        color: var(--accent-color);
+    }
+
+    .contact-details strong {
+      color: var(--accent-color);
+      display: inline-block;
+      min-width: 80px; 
+    }
+    
+    /* -----------------------------------------------------------------------------------------------------------------------------------------
+    ULEPSZONY FORMULARZ KONTAKTOWY
+    ----------------------------------------------------------------------------------------------------------------------------------------- */
+    .contact-form label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--light-blue-text); 
+        font-weight: 600;
+        font-size: 1rem;
+        position: relative;
+        top: 5px; 
+    }
+
+    .contact-form input[type="text"],
+    .contact-form input[type="email"],
+    .contact-form textarea {
+        width: 100%;
+        padding: 15px 15px; 
+        margin-bottom: 25px; 
+        border: 1px solid var(--border-color);
+        border-radius: 8px; 
+        background-color: var(--dark-blue-bg); /* Ciemniejsze tło pola */
+        color: var(--light-blue-text);
+        box-sizing: border-box; 
+        font-size: 1rem;
+        transition: all 0.3s ease; 
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 15px rgba(100, 255, 218, 0.5); 
+        background-color: #0d2138; 
+    }
+
+    .contact-form textarea {
+        resize: vertical;
+        min-height: 180px; 
+    }
+
+    .submit-btn {
+        background-color: var(--accent-color);
+        color: var(--dark-blue-bg);
+        border: none;
+        padding: 15px 30px;
+        border-radius: 50px; 
+        font-weight: 800;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+        display: block; 
+        width: 100%;
+        max-width: 250px; 
+        margin: 0 auto; 
+    }
+
+    .submit-btn:hover {
+        background-color: #98fcd0; 
+        transform: translateY(-3px); 
+        box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4); 
+    }
+
+    /* -----------------------------------------------------------------------------------------------------------------------------------------
+    STOPKA (MAKSYMALNIE ULEPSZONA)
+    ----------------------------------------------------------------------------------------------------------------------------------------- */
+    footer {
+      background-color: var(--medium-blue-bg); 
+      color: var(--light-blue-text);
+      padding: 50px 20px 20px;
+      border-top: 3px solid var(--border-color);
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
+      font-size: 1rem;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 40px;
+      text-align: left;
+      padding-bottom: 30px;
+    }
+
+    .footer-col h3 {
+      color: var(--accent-color);
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      font-weight: 800;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 5px;
+    }
+
+    .footer-links ul, .footer-contact ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li, .footer-contact li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a, .footer-contact a {
+      color: var(--grayish-text);
+      text-decoration: none;
+      transition: color 0.3s;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-links a:hover, .footer-contact a:hover {
+      color: var(--accent-color);
+      transform: translateX(5px); 
+    }
+
+    .footer-links a i, .footer-contact a i {
+        margin-right: 10px;
+        color: var(--accent-color);
+        font-size: 0.9rem;
+    }
+
+    /* Stylizacja Social Media w stopce */
+    .social-links {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+        justify-content: flex-start; 
+    }
+
+    .social-links a {
+        color: var(--grayish-text);
+        font-size: 2.2rem; 
+        transition: color 0.3s, transform 0.2s;
+        text-decoration: none;
+    }
+
+    .social-links a:hover {
+        color: var(--accent-color);
+        transform: translateY(-5px); 
+    }
+
+    .copyright {
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+      padding-top: 20px;
+      margin-top: 20px;
+      color: var(--grayish-text);
+      font-size: 0.9rem;
+    }
+
+    /* -----------------------------------------------------------------------------------------------------------------------------------------
+    RESPONSYWNOŚĆ
+    ----------------------------------------------------------------------------------------------------------------------------------------- */
+    @media (max-width: 768px) {
+        header h1 {
+            font-size: 2rem;
+        }
+
+        .contact-section {
+            flex-direction: column;
+            padding: 30px 20px;
+            margin: 20px;
+        }
+
+        /* Nawigacja mobilna */
+        .nav-links {
+            display: none; 
+            flex-direction: column;
+            position: absolute;
+            top: 60px; 
+            left: 0;
+            width: 100%;
+            background-color: var(--medium-blue-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 10px 0;
+            box-shadow: 0 4px 10px rgba(10, 25, 47, 0.5);
+        }
+
+        .nav-links a {
+            padding: 12px 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .nav-links.open {
+            display: flex; 
+        }
+
+        .menu-toggle {
+            display: block; 
+        }
+        
+        .submit-btn {
+            max-width: none; 
+        }
+
+        /* Stopka mobilna */
+        .footer-content {
+            grid-template-columns: 1fr; 
+            text-align: center;
+            gap: 30px;
+        }
+        
+        .footer-col h3 {
+            text-align: center;
+        }
+        
+        .footer-links a, .footer-contact a {
+            justify-content: center; 
+            transform: none;
+        }
+        
+        .footer-links a:hover, .footer-contact a:hover {
+            transform: none; 
+        }
+
+        .social-links {
+            justify-content: center; 
+        }
+    }
+  </style>
+  
+</head>
+<body>
+
+  <nav class="top-navbar">
+    <div class="logo">
+      Igor Maciaszek
+    </div>
+    <div class="menu-toggle" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+    
+    <div class="nav-links" id="nav-links">
+      <a href="index.html">Start</a>
+      <a href="cennik.html">Cennik</a>
+      <a href="o-nas.html">O nas</a>
+      <a href="kontakt.html" class="active">Kontakt</a>
+    </div>
+  </nav>
+
+  <div id="particles-js"></div>
+
+  <header data-aos="fade-down">
+    <h1>Skontaktuj się z nami</h1>
+    <p>Jesteśmy gotowi, by odpowiedzieć na Twoje pytania.</p>
+  </header>
+
+  <section class="contact-section" data-aos="fade-up">
+    
+    <div class="contact-info" data-aos="fade-right" data-aos-delay="100">
+        <h2>Dane kontaktowe</h2>
+        <div class="contact-details">
+          <p><strong>Email:</strong> <a href="mailto:kontakt@igormaciaszek.pl">kontakt@igormaciaszek.pl</a></p>
+          <p><strong>Telefon:</strong> <a href="tel:+48724424290">+48 724-424-290</a></p>
+          <p><strong>Adres:</strong> ul. Przykładowa 123, 00-000 Warszawa</p>
+        </div>
+    </div>
+    
+    <div class="contact-form-container" data-aos="fade-left" data-aos-delay="200">
+        <h2>Wyślij wiadomość</h2>
+        <form class="contact-form" action="https://formspree.io/f/mblzlvvj" method="POST">
+            <div>
+                <label for="name">Imię i Nazwisko</label>
+                <input type="text" id="name" name="name" required placeholder="Wpisz swoje pełne imię">
+            </div>
+            <div>
+                <label for="email">Adres E-mail</label>
+                <input type="email" id="email" name="email" required placeholder="Twoja najlepsza poczta e-mail">
+            </div>
+            <div>
+                <label for="message">Wiadomość</label>
+                <textarea id="message" name="message" required placeholder="Opisz krótko swój projekt lub pytanie..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Wyślij wiadomość</button>
+        </form>
+    </div>
+
+  </section>
+
+  <footer data-aos="fade-up">
+    <div class="footer-content">
+        
+        <div class="footer-col footer-links">
+            <h3>Szybkie Linki</h3>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-arrow-right"></i> Start</a></li>
+                <li><a href="cennik.html"><i class="fas fa-arrow-right"></i> Cennik Usług</a></li>
+                <li><a href="o-nas.html"><i class="fas fa-arrow-right"></i> O Nas / Portfolio</a></li>
+                <li><a href="kontakt.html"><i class="fas fa-arrow-right"></i> Kontakt</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col footer-contact">
+            <h3>Kontakt</h3>
+            <ul>
+                <li>
+                    <a href="tel:+48600123456" title="Zadzwoń do nas">
+                        <i class="fas fa-phone-alt"></i> +48 600 123 456
+                    </a>
+                </li>
+                <li>
+                    <a href="mailto:kontakt@igormaciaszek.pl" title="Napisz do nas e-mail">
+                        <i class="fas fa-envelope"></i> kontakt@igormaciaszek.pl
+                    </a>
+                </li>
+                <li>
+                    <i class="fas fa-map-marker-alt" style="margin-right: 10px; color: var(--accent-color);"></i> 
+                    ul. Przykładowa 123, Warszawa
+                </li>
+            </ul>
+            <p style="margin-top: 20px; font-size: 0.9rem; color: var(--grayish-text);">
+                <i class="fas fa-clock"></i> Jesteśmy dostępni od 9:00 do 17:00.
+            </p>
+        </div>
+
+        <div class="footer-col">
+            <h3>Znajdź nas w sieci</h3>
+            
+            <div class="social-links">
+                <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="Twitter/X"><i class="fab fa-x-twitter"></i></a>
+            </div>
+            
+            <p style="margin-top: 30px; font-size: 1.1rem; color: var(--light-blue-text); font-weight: 600;">
+                Masz pytania? <a href="kontakt.html" class="submit-btn" style="display: inline-block; padding: 5px 15px; margin-top: 10px;">Napisz teraz</a>
+            </p>
+        </div>
+        
+    </div>
+
+    <div class="copyright">
+        &copy; 2025 Igor Maciaszek. Wszelkie prawa zastrzeżone. | Projekt i rozwój w stylu Neodev.
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    // Inicjalizacja AOS (animacje przewijania)
+    AOS.init({ duration: 800, once: true });
+
+    // Inicjalizacja ParticlesJS (efekt tła)
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 60, density: { enable: true, value_area: 800 } },
+        color: { value: "#64ffda" },
+        shape: { type: "circle", stroke: { width: 0 } },
+        opacity: { value: 0.3, random: true },
+        size: { value: 3, random: true },
+        line_linked: {
+          enable: true, distance: 150, color: "#64ffda", opacity: 0.2, width: 1
+        },
+        move: { enable: true, speed: 2, out_mode: "out" }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        },
+        modes: {
+          repulse: { distance: 100, duration: 0.4 },
+          push: { particles_nb: 4 }
+        }
+      },
+      retina_detect: true
+    });
+    
+    // Logika menu mobilnego (toggle klasy 'open')
+    document.getElementById('menu-toggle').onclick = function() {
+        document.getElementById('nav-links').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
